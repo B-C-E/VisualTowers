@@ -4,9 +4,10 @@ public class Driver
 {
     public static void main(String args[])
     {
-        HanoiSolver han = new HanoiSolver(12,false);
-        han.draw();
-        han.solve(12,Peg.A,Peg.C,Peg.B);
+        HanoiSolver han = new HanoiSolver(15);
+        Visualizer myVisuals = new Visualizer(400,400,"Cat",han);
+        han.setVisuality(true,myVisuals);
+        han.solve(15,Peg.A,Peg.C,Peg.B);
     }
 
 }

@@ -5,14 +5,35 @@ import java.util.Stack;
 
 public class HanoiSolver
 {
+    public Stack<Integer> getStackA()
+    {
+        return stackA;
+    }
+
+    public Stack<Integer> getStackB()
+    {
+        return stackB;
+    }
+
+    public Stack<Integer> getStackC()
+    {
+        return stackC;
+    }
+
+    public int getDiscs()
+    {
+        return discs;
+    }
+
     private Stack<Integer> stackA;
     private Stack<Integer> stackB;
     private Stack<Integer> stackC;
     private int discs;
-    private boolean isVisual;
+    private boolean isVisual = false;
+    private Visualizer visuals = null;
 
     //constructor
-    public HanoiSolver(int discs, boolean isVisual)
+    public HanoiSolver(int discs)
     {
         stackA = new Stack<Integer>();
         stackB = new Stack<Integer>();
@@ -31,8 +52,17 @@ public class HanoiSolver
     {
         if (toMove == 1)
         {
-            clearOut();
             System.out.println(from + " ----> " + to);
+
+            if(isVisual)
+            {
+                try
+                {
+                    Thread.sleep(1);
+                }catch (Exception e) {}
+                visuals.panel.repaint();
+            }
+
             move(from,to);
         }
         else//if there are multiple disks
@@ -75,9 +105,10 @@ public class HanoiSolver
 
 
     //sets if the stack is visual or not
-    public void setVisuality(boolean newVisuality)
+    public void setVisuality(boolean newVisuality, Visualizer newVisuals)
     {
         isVisual = newVisuality;
+        visuals = newVisuals;
     }//end of setVisuality
 
     //draws the current state of a tower of hanoi
