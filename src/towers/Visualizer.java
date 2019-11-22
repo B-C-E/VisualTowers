@@ -11,7 +11,7 @@ import javax.swing.*;
 public class Visualizer
 {
     public HanoiPanel panel;
-    public HanoiSolver solver;
+    public VisualHanoiSolver solver;
     private int width;
     private int height;
     private String name;
@@ -22,8 +22,17 @@ public class Visualizer
     }
 
     private JFrame frame;
-    public Visualizer(int width, int height, String name, HanoiSolver solver)
+    public Visualizer(int width, int height, String name, VisualHanoiSolver solver)
     {
+        //if width is given as -1, autogenerate a nice size for the width
+        if (width == -1)
+        {
+            //get screen size using the Toolkit class
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            width = screenSize.width*3/4;
+            height = screenSize.height*3/4;
+        }//end of autogenerating width and height
+
         this.width = width;
         this.height = height;
         JFrame frame = new JFrame(name);
@@ -66,45 +75,80 @@ public class Visualizer
 
 
         //draws a hanoi game
+        //this gets pretty complicated, as it will accurately scale for any screen size
         public void paint(Graphics g)
         {
-            //clear
+
+            /////////////////////////////////
+            //clear the screen to dark grey//
+            /////////////////////////////////
             g.setColor(Color.DARK_GRAY);
             g.fillRect(0, 0, width, height);
-            //draw & label base
+
+
+            ///////////////////////////////////
+            //Draw the base of the Hanoi Game//
+            ///////////////////////////////////
             g.setColor(Color.BLUE);
+
+            //the top left of the base is calculated as follows:
             int leftBase = width - (int) (width * 0.95);
             int topBase = (int) (height * 0.8);
+
+            //the width and height of the base are calculated as follows:
             int lengthBase = (int) (width * 0.9);
             int heightBase = height / 10;
+
+            //draw the base
             g.fillRect(leftBase, topBase, lengthBase, heightBase);
 
-            //draw poles
+            //////////////////
+            //Draw the poles//
+            //////////////////
+
             g.setColor(Color.lightGray);
 
-            int widthPole = (int) ((8.5 / 10) * (lengthBase / 3.2) * (1.0 / solver.getDiscs()));
+            //first, we will calulate the size and position of the poles
+
             //Width of the pole is 85% the size of the smallest disk that will be on it.
-            int heightPole = (height) / 2;
+            int widthPole = (int) ((8.5 / 10) * (lengthBase / 3.2) * (1.0 / solver.getDiscs()));
+
+            //height of the pole is 0.55 * the height of the screen
+            int heightPole = height*55/100;
+
+            //the first one is 1/6 of a base length away from the left edge of the base
             int firstPoleLocation = leftBase + lengthBase / 6;
+            //the second one is in the dead center
             int secondPoleLocation = leftBase + (lengthBase / 2);
+            //the third one is 1/6 of a base length away from the right edge of the base
             int thirdPoleLocation = leftBase + (lengthBase / 6) * 5;
+
+            //draw the poles!
             g.fillRect(firstPoleLocation - widthPole / 2, topBase - heightPole, widthPole, heightPole);
             g.fillRect(secondPoleLocation - widthPole / 2, topBase - heightPole, widthPole, heightPole);
             g.fillRect(thirdPoleLocation - widthPole / 2, topBase - heightPole, widthPole, heightPole);
 
-            //populate poles
+            //////////////////
+            //populate poles//
+            //////////////////
 
-            int discHeight = heightPole / solver.getDiscs();
+            //Calculate the height of a disc ( 1/2 of the screen height / number of discs)
+            int discHeight = (height/2) / solver.getDiscs();
             int heightSpot = discHeight;
+
+            //The largest disc (the bottom disc) is 32/100ths the length of the base
             int maxDiscWidth = (int) (lengthBase / 3.2);
 
-            //pole 1
+            //populate pole 1
+
+            //get all the discs to draw
             Stack<Integer> reverseDiscStack = new Stack<Integer>();
             for (int discNumb : solver.getStackA())
             {
                 reverseDiscStack.push(discNumb);
             }
 
+            //for each disc
             for (int discNumb : reverseDiscStack)
             {
                 //generate proper color for each disc
@@ -115,14 +159,19 @@ public class Visualizer
                 heightSpot += discHeight;
             }
 
-            //pole 2
+            //populate pole 2
+
+            //reset how high up we are drawing discs
             heightSpot = discHeight;
+
+            //get all the discs to draw
             reverseDiscStack = new Stack<Integer>();
             for (int discNumb : solver.getStackB())
             {
                 reverseDiscStack.push(discNumb);
             }
 
+            //for each disc
             for (int discNumb : reverseDiscStack)
             {
                 //generate proper color for each disc
@@ -133,14 +182,19 @@ public class Visualizer
                 heightSpot += discHeight;
             }
 
-            //pole 3
+            //populatepole 3
+
+            //reset how high up we are drawing discs
             heightSpot = discHeight;
+
+            //get all the discs to draw
             reverseDiscStack = new Stack<Integer>();
             for (int discNumb : solver.getStackC())
             {
                 reverseDiscStack.push(discNumb);
             }
 
+            //for each disc
             for (int discNumb : reverseDiscStack)
             {
                 //generate proper color for each disc
@@ -152,9 +206,17 @@ public class Visualizer
             }
 
 
+            //The end!
+            //We:
+            // - reset the canvas
+            // - drew the base and the poles
+            // - drew all the discs
+            //That's all!
+
         }//end of paint
 
         //given a disc number, what color should it be
+        //(chooses from 7 colors in a repeating pattern)
         public Color generateDiskColor(int numb)
         {
             numb = numb % 6;
