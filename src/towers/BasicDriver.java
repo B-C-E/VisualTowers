@@ -19,7 +19,7 @@ public class BasicDriver
 
 
         //INTRO
-        System.out.println("Hello and welcome to the Towers of Hanoi");
+        System.out.println("Hello and welcome to the Towers of Hanoi. I present you two options:");
 
         //LOOP
         while (!b_readyToExit)
@@ -29,8 +29,8 @@ public class BasicDriver
             System.out.println("Would you like to:");
 
 
-            System.out.println("[s] Generate a solution for a number of disks");
-            System.out.println("[v] View a visual simulation of a Towers of Hanoi Game");
+            System.out.println("[s] Generate a solution for a number of disks (in boring old text)");
+            System.out.println("[v] Enter Visual Mode");
             System.out.println("[e] Exit");
 
             //GET INPUT
@@ -46,6 +46,7 @@ public class BasicDriver
 
                 //OPTION v - visual simulation
                 case 'v':
+                    System.out.println("Exiting text mode... \nLoading...");
                     visualize();
                     break;
 

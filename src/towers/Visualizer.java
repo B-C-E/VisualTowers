@@ -45,6 +45,8 @@ public class Visualizer
 
         panel = new HanoiPanel();
         frame.getContentPane().add(panel);
+
+        //construct south
         frame.pack();
         this.solver = solver;
     }
