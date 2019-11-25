@@ -94,7 +94,10 @@ public class VisualHanoiSolver
             {
                 try
                 {
-                    frameWait.wait();
+                    synchronized (frameWait)
+                    {
+                        frameWait.wait();
+                    }
                 } catch(Exception e){}
             }
             //end of waiting between frames
