@@ -9,8 +9,17 @@ public class VisualHanoiSolver
     private Stack<Integer> stackB;
     private Stack<Integer> stackC;
     private int discs;
+
+    public void setFrameWait(int frameWait)
+    {
+        synchronized ((Integer)frameWait)
+        {
+            this.frameWait = frameWait;
+        }
+    }
+
     private Visualizer visuals = null;
-    private int frameWait; // how long tow wait between frames
+    private Integer frameWait; // how long tow wait between frames
 
     //constructor
     public VisualHanoiSolver(int discs, int frameWait)
@@ -73,7 +82,7 @@ public class VisualHanoiSolver
 
             //if this solver is not solving at max speed,
             //wait a little bit between frames
-            if (frameWait != 0)
+            if (frameWait > 0)
             {
                 try
                 {
@@ -81,7 +90,14 @@ public class VisualHanoiSolver
                 } catch (Exception e)
                 {
                 }
-            }//end of waiting between frames
+            }else if (frameWait == -1)//if we are paused
+            {
+                try
+                {
+                    frameWait.wait();
+                } catch(Exception e){}
+            }
+            //end of waiting between frames
 
             move(from, to);
             visuals.panel.repaint();

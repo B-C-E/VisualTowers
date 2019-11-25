@@ -7,6 +7,8 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.Stack;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class Visualizer
 {
@@ -14,14 +16,14 @@ public class Visualizer
     public VisualHanoiSolver solver;
     private int width;
     private int height;
+    private int frameWait;
     private String name;
-
     public JFrame getFrame()
     {
         return frame;
     }
-
     private JFrame frame;
+
     public Visualizer(int width, int height, String name, VisualHanoiSolver solver)
     {
         //if width is given as -1, autogenerate a nice size for the width
@@ -35,7 +37,8 @@ public class Visualizer
 
         this.width = width;
         this.height = height;
-        JFrame frame = new JFrame(name);
+        this.frameWait = -1;
+        this.frame = new JFrame(name);
         frame.setPreferredSize(new Dimension(width, height));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //frame.setUndecorated(true);
@@ -45,8 +48,8 @@ public class Visualizer
 
         panel = new HanoiPanel();
         frame.getContentPane().add(panel);
+        constructSouth();
 
-        //construct south
         frame.pack();
         this.solver = solver;
     }
@@ -70,6 +73,53 @@ public class Visualizer
     {
         this.height = height;
     }
+
+    //Creates the buttons on the bottom panel
+    private void constructSouth() {
+        JPanel p = new JPanel();
+
+
+        //A nice slider for framerate
+        final JSlider slider = new JSlider(JSlider.HORIZONTAL,1,100,50);
+        slider.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                int newWait = slider.getValue()*20;
+                solver.setFrameWait(newWait);
+                frameWait = newWait;//stores last framerate so that we can go back to that rate after pausing
+            }
+        });
+        slider.setMajorTickSpacing(20);
+        slider.setMinorTickSpacing(5);
+        slider.setPaintTicks(true);
+
+
+        p.add(new JLabel("Fast"));
+        p.add(slider);
+        p.add(new JLabel("Slow"));
+
+        //end of slider stuff
+
+        //start button
+        JButton b1 = new JButton("Start");
+        b1.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            solver.setFrameWait(frameWait);
+            }
+        });
+        p.add(b1);
+
+        JButton b2 = new JButton("Stop");
+        b2.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                solver.setFrameWait(-1);
+            }
+        });
+        p.add(b2);
+
+
+
+        frame.getContentPane().add(p, BorderLayout.SOUTH);
+    }//end of constructSouth
 
     //internal class
     public class HanoiPanel extends JPanel

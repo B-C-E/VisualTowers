@@ -97,31 +97,10 @@ public class BasicDriver
             System.out.println("How many discs shall we simulate?");
              int discs = GetInput.getRangeInt(1, Integer.MAX_VALUE);
 
-             System.out.println("\nWould you like to move discs as fast as the computer can process,");
-             System.out.println("which is fun to watch,");
-             System.out.println("or move discs with a little bit of time between movements,");
-             System.out.println("which allows you to better understand what is going on?");
-             System.out.println("[i] Infinite Speed");
-             System.out.println("[l] Limited Speed");
-
-             int frameWait;//how long to wait between frames, in milliseconds
-
-             if (GetInput.get('i','l') == 'i')//if they want infinite speed
-             {
-                 frameWait = 0; //wait 0 milliseconds between frames
-             }
-             else//if they want limited speed
-             {
-                 System.out.println("\nHow many seconds should we wait between disc movements?");
-                 System.out.println("(A number between 0.2 and 1 seconds is recommended)");
-                 frameWait = (int)(GetInput.getRangeDouble(0.0,4.0) * 1000);//converted to milliseconds
-                 System.out.println("If a wait time of " + frameWait/1000.0 + " turns out to be too long, simply close" +
-                         " the application and try again." );
-             }
 
              System.out.println("Generating visuals... (Will open in a new window. If it does not open, your IDE" +
                      " may be blocking the opening of new windows)");
-             VisualHanoiSolver visHan = new VisualHanoiSolver(discs,frameWait);
+             VisualHanoiSolver visHan = new VisualHanoiSolver(discs,1000);
 
              //Since we have said -1 for width and height, it will attempt to autodetermine a good size
              Visualizer myVisuals = new Visualizer(-1,-1,"Visual Hanoi Solver",visHan);
