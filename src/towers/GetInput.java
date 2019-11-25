@@ -212,11 +212,11 @@ public class GetInput
             //explain to the user what the program wants
             //Ex: Please type [a] or [b] or [c] or [d]
             System.out.print("Please type [" + options[0]);
-            for (int i = 1; i < options.length; i++)
+            for (int i = 1; i < options.length-1; i++)
             {
-                System.out.print("] or [" + options[i]);
-                System.out.println("]");
+                System.out.print("], [" + options[i]);
             }
+            System.out.println("] or [" + options[options.length-1] + "]");
 
             //No good input? Loop!
         }//end of loop

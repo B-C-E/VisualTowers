@@ -46,7 +46,7 @@ public class BasicDriver
 
                 //OPTION v - visual simulation
                 case 'v':
-
+                    visualize();
                     break;
 
                 //OPTION E - EXIT
@@ -70,14 +70,24 @@ public class BasicDriver
     //Displays the correct solution to a game of Hanoi
     public static void solveForNumber()
     {
-          System.out.println("What number of disks would you like to solve for?");
-          int discs = GetInput.getRangeInt(1, Integer.MAX_VALUE);
-          HanoiSolver solver = new HanoiSolver(discs);
-          System.out.println("The correct solution is:");
-          solver.solve(discs,Peg.A,Peg.C,Peg.B);
+        System.out.println("What number of disks would you like to solve for?");
+        int discs = GetInput.getRangeInt(1, Integer.MAX_VALUE);
+        HanoiSolver solver = new HanoiSolver(discs);
+        System.out.println("The correct solution is:");
+        solver.solve(discs, Peg.A, Peg.C, Peg.B);
 
-          System.out.println();
-          System.out.println("That took " + solver.getMovesMade() + " moves.");
+        System.out.println();
+
+        int calculatedNumberOfMoves = (int) (Math.pow(2,discs) - 1);//for n discs, number of moves is always (2^n) - 1
+
+        if (calculatedNumberOfMoves == 1)
+        {
+            System.out.println("Of course, one disc takes only one move.");
+        } else
+        {
+            System.out.println("That took " + calculatedNumberOfMoves + " moves.");
+        }
+
     }//end of solveorNumber
 
     //Visualizes a game of hanoi
@@ -86,7 +96,7 @@ public class BasicDriver
             System.out.println("How many discs shall we simulate?");
              int discs = GetInput.getRangeInt(1, Integer.MAX_VALUE);
 
-             System.out.println("Would you like to move discs as fast as the computer can process,");
+             System.out.println("\nWould you like to move discs as fast as the computer can process,");
              System.out.println("which is fun to watch,");
              System.out.println("or move discs with a little bit of time between movements,");
              System.out.println("which allows you to better understand what is going on?");
@@ -101,19 +111,21 @@ public class BasicDriver
              }
              else//if they want limited speed
              {
-                 System.out.println("How many seconds should we wait between disc movements?");
+                 System.out.println("\nHow many seconds should we wait between disc movements?");
                  System.out.println("(A number between 0.2 and 1 seconds is recommended)");
-                 frameWait = (int)(GetInput.getRangeDouble(0.0,5.0) * 1000);//converted to milliseconds
+                 frameWait = (int)(GetInput.getRangeDouble(0.0,4.0) * 1000);//converted to milliseconds
+                 System.out.println("If a wait time of " + frameWait/1000.0 + " turns out to be too long, simply close" +
+                         " the application and try again." );
              }
 
              System.out.println("Generating visuals... (Will open in a new window. If it does not open, your IDE" +
-                     " may be blocking the opening of new windows))");
+                     " may be blocking the opening of new windows)");
              VisualHanoiSolver visHan = new VisualHanoiSolver(discs,frameWait);
 
              //Since we have said -1 for width and height, it will attempt to autodetermine a good size
              Visualizer myVisuals = new Visualizer(-1,-1,"Visual Hanoi Solver",visHan);
              visHan.setVisuals(myVisuals);
-             visHan.solve(17,Peg.A,Peg.C,Peg.B);
+             visHan.solve(discs,Peg.A,Peg.C,Peg.B);
 
     }//end of subLoop
 

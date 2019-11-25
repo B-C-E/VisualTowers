@@ -10,7 +10,6 @@ package towers;
 public class HanoiSolver
 {
     private int discs;
-    private int movesMade;
 
     //constructor
     public HanoiSolver(int discs)
@@ -32,7 +31,6 @@ public class HanoiSolver
         if (toMove == 1)
         {
             System.out.println(from + " ----> " + to); //simply move the disc
-            movesMade++;//increment the number of moves made
         }
         else//if there are multiple disks
         {
@@ -44,11 +42,5 @@ public class HanoiSolver
             solve(toMove-1,hold,to,from);
         }
     }//end of solve
-
-    //returns the number of moves made
-    public int getMovesMade()
-    {
-        return movesMade;
-    }//end of getMovesMade
 
 }//end of HanoiSolver
