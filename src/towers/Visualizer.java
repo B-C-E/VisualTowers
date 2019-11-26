@@ -165,6 +165,7 @@ public class Visualizer
 
         //this buttons toggles (on or off) infinite solving speed (as fast as the computer can handle
         JButton b3 = new JButton("Infinite Speed");
+
         b3.addActionListener(new ActionListener()
         {
             public void actionPerformed(ActionEvent e)//when clicked
@@ -269,7 +270,7 @@ public class Visualizer
             //////////////////
 
             //Calculate the height of a disc ( 1/2 of the screen height / number of discs)
-            int discHeight = (height / 2) / solver.getDiscs();
+            int discHeight = Math.min((height/4),(height / 2) / solver.getDiscs());
             int heightSpot = discHeight;
 
             //The largest disc (the bottom disc) is 32/100ths the length of the base
