@@ -1,14 +1,6 @@
 package towers;
 
-//IMPORTS HERE
-
-import java.time.format.DateTimeFormatter;//these are non essential example imports
-import java.time.LocalDateTime;          // they are only used by one example method (subSelection)
-
-//This is a utility class I (B-C-E) made for drivers.
-//It is designed to be copied and edited as per a users desires,
-//but does have a few handy methods
-//Please use in conjunction with the GetInput class
+//This driver starts the towers of Hanoi game
 public class BasicDriver
 {
 
@@ -79,7 +71,7 @@ public class BasicDriver
 
         System.out.println();
 
-        int calculatedNumberOfMoves = (int) (Math.pow(2,discs) - 1);//for n discs, number of moves is always (2^n) - 1
+        int calculatedNumberOfMoves = (int) (Math.pow(2, discs) - 1);//for n discs, number of moves is always (2^n) - 1
 
         if (calculatedNumberOfMoves == 1)
         {
@@ -89,18 +81,20 @@ public class BasicDriver
             System.out.println("That took " + calculatedNumberOfMoves + " moves.");
         }
 
-    }//end of solveorNumber
+    }//end of solve for Number
 
-    //Visualizes a game of hanoi
+    //starts a simulation of a towers of hanoi game
     public static void visualize()
     {
-                        System.out.println("Generating visuals... (Will open in a new window. If it does not open, your IDE" +
-                     " may be blocking the opening of new windows)");
-             VisualHanoiSolver visHan = new VisualHanoiSolver(4,-1);
+        System.out.println("Generating visuals... (Will open in a new window. If it does not open, your IDE" +
+                " may be blocking the opening of new windows)");
 
-             //Since we have said -1 for width and height, it will attempt to autodetermine a good size
-             Visualizer myVisuals = new Visualizer(-1,-1,"Visual Hanoi Solver",visHan);
-             visHan.setVisuals(myVisuals);
+
+        VisualHanoiSolver visHan = new VisualHanoiSolver(4, -1);
+
+        //Since we have said -1 for width and height, it will attempt to autodetermine a good size
+        Visualizer myVisuals = new Visualizer(-1, -1, "Visual Hanoi Solver", visHan);
+        visHan.setVisuals(myVisuals);
 
     }//end of subLoop
 

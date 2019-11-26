@@ -16,7 +16,7 @@ public class GetInput
     public static char getYN()
     {
         Scanner scn_kkb = new Scanner(System.in);//make a scanner
-        while(true)
+        while (true)
         {
             String input = scn_kkb.nextLine() + " ";
             if (Character.toLowerCase(input.charAt(0)) == 'y')//if they typed yes
@@ -46,7 +46,7 @@ public class GetInput
             //if negative
             if (input.charAt(0) == '-')
             {
-                goodInput+= "-";
+                goodInput += "-";
             }
 
             for (int i = 0; i < input.length(); i++)//go through each character of the input
@@ -54,7 +54,7 @@ public class GetInput
                 if (!(input.charAt(i) < 48 || input.charAt(i) > 57))//if the character is not a number, don't add it
                 {
                     //otherwise, do add it
-                    goodInput+= input.charAt(i);
+                    goodInput += input.charAt(i);
                 }
 
             }//end of going through each character of input and removing non numbers
@@ -62,7 +62,7 @@ public class GetInput
 
             if (goodInput != "")
             {
-                goodInput = shortenString(goodInput,(Long.MAX_VALUE+ "").length() -1 );
+                goodInput = shortenString(goodInput, (Long.MAX_VALUE + "").length() - 1);
                 long numb = Long.parseLong(goodInput);
                 if (numb >= min && numb <= max)
                 {
@@ -79,7 +79,7 @@ public class GetInput
     public static char getChar()
     {
         Scanner scn_kkb = new Scanner(System.in);
-        return (scn_kkb.nextLine()+" ").toLowerCase().charAt(0);
+        return (scn_kkb.nextLine() + " ").toLowerCase().charAt(0);
     }//end of getChar
 
     //gets a char from a --> z
@@ -111,7 +111,7 @@ public class GetInput
             //if negative
             if (input.charAt(0) == '-')
             {
-                goodInput+= "-";
+                goodInput += "-";
             }
 
             for (int i = 0; i < input.length(); i++)//go through each character of the input
@@ -119,7 +119,7 @@ public class GetInput
                 if (!(input.charAt(i) < 48 || input.charAt(i) > 57))//if the character is not a number, don't add it
                 {
                     //if it is, do
-                    goodInput+= input.charAt(i);
+                    goodInput += input.charAt(i);
                 }
 
             }//end of going through each character of input and removing non numbers
@@ -127,7 +127,7 @@ public class GetInput
 
             if (goodInput != "")
             {
-                goodInput = shortenString(goodInput,(Integer.MAX_VALUE+ "").length()-1);
+                goodInput = shortenString(goodInput, (Integer.MAX_VALUE + "").length() - 1);
                 int numb = Integer.parseInt(goodInput);
                 if (numb >= min && numb <= max)
                 {
@@ -151,7 +151,7 @@ public class GetInput
             //if negative
             if (input.charAt(0) == '-')
             {
-                goodInput+= "-";
+                goodInput += "-";
             }
 
             int periodCount = 0;
@@ -162,13 +162,13 @@ public class GetInput
                 //if the character is not a number, don't add it
                 {
                     //if it is, do
-                    goodInput+= input.charAt(i);
+                    goodInput += input.charAt(i);
                 }
 
                 //if it's the first found period
-                if ((periodCount == 0 && input.charAt(i) == '.') )
+                if ((periodCount == 0 && input.charAt(i) == '.'))
                 {
-                    goodInput+= ".";
+                    goodInput += ".";
                     periodCount++;
                 }
 
@@ -177,7 +177,7 @@ public class GetInput
 
             if (goodInput != "")
             {
-                goodInput = shortenString(goodInput,(Double.MAX_VALUE+ "").length()-1);
+                goodInput = shortenString(goodInput, (Double.MAX_VALUE + "").length() - 1);
                 double numb = Double.parseDouble(goodInput);
                 if (numb >= min && numb <= max)
                 {
@@ -192,7 +192,7 @@ public class GetInput
 
     //from a selection of char options, get the user to choose one
     //if you run this with only one option, you will get an error
-    public static char get(char ... options)
+    public static char get(char... options)
     {
         Scanner scn_kkb = new Scanner(System.in);//make a scanner
         while (true)
@@ -212,11 +212,11 @@ public class GetInput
             //explain to the user what the program wants
             //Ex: Please type [a] or [b] or [c] or [d]
             System.out.print("Please type [" + options[0]);
-            for (int i = 1; i < options.length-1; i++)
+            for (int i = 1; i < options.length - 1; i++)
             {
                 System.out.print("], [" + options[i]);
             }
-            System.out.println("] or [" + options[options.length-1] + "]");
+            System.out.println("] or [" + options[options.length - 1] + "]");
 
             //No good input? Loop!
         }//end of loop
@@ -266,7 +266,6 @@ public class GetInput
         Scanner scn_kkb = new Scanner(System.in);
         return scn_kkb.nextLine();
     }//end of getString
-
 
 
     //#####################################################//

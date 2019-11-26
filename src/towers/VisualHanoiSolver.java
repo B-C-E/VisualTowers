@@ -1,6 +1,5 @@
 package towers;
 
-import java.io.IOException;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;

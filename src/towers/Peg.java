@@ -2,5 +2,5 @@ package towers;
 
 public enum Peg
 {
-    A,B,C;
+    A, B, C
 }

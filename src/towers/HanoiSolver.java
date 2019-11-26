@@ -31,15 +31,14 @@ public class HanoiSolver
         if (toMove == 1)
         {
             System.out.println(from + " ----> " + to); //simply move the disc
-        }
-        else//if there are multiple disks
+        } else//if there are multiple disks
         {
             //move everything but the last to the holding peg
-            solve(toMove-1,from,hold,to);
+            solve(toMove - 1, from, hold, to);
             //move the last to the destination peg
-            solve(1,from,to,hold);
+            solve(1, from, to, hold);
             //move everything to the last peg
-            solve(toMove-1,hold,to,from);
+            solve(toMove - 1, hold, to, from);
         }
     }//end of solve
 
