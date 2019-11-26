@@ -8,10 +8,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Stack;
 
-public class Visualizer
+public class SYVisualizer
 {
     private HanoiPanel panel;
-    private VisualHanoiSolver solver;
+    private SYVisualHanoiSolver solver;
     private int width;
     private int height;
     private int frameWait;
@@ -20,7 +20,7 @@ public class Visualizer
     //constructor
     //Needs a width, height, and name (What shall be displayed in the top of the window)
     //and which VisualHanoiSolver will be solving a game of hanoi for it
-    public Visualizer(int width, int height, String name, VisualHanoiSolver solver)
+    public SYVisualizer(int width, int height, String name, SYVisualHanoiSolver solver)
     {
         //if width is given as -1, it will auto-generate a nice size for the width
         if (width == -1)
@@ -136,7 +136,7 @@ public class Visualizer
                         {
                             try
                             {
-                                solver.solve(solver.getDiscs(), Peg.A, Peg.C, Peg.B);
+                                solver.solve(solver.getDiscs(), SYPeg.A, SYPeg.C, SYPeg.B);
                             } catch (Exception e)
                             {
                             }

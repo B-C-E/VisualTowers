@@ -8,19 +8,19 @@ package towers;
 // 000
 //00000
 //You cannot place a disk on top of one smaller than it, and can only move one at a time. Move them all to the third peg)
-public class HanoiSolver
+public class SYHanoiSolver
 {
     private int discs;
 
     //constructor
-    public HanoiSolver(int discs)
+    public SYHanoiSolver(int discs)
     {
         this.discs = discs;
     }//end of constructor
 
     //solves a tower of hanoi. You must tell it the number of discs to move,
     //the Peg that the discs are on, the peg that they are to be moved to, and the extra holding peg
-    public void solve(int toMove, Peg from, Peg to, Peg hold)
+    public void solve(int toMove, SYPeg from, SYPeg to, SYPeg hold)
     {
         //if there is but one disc
         if (toMove == 1)

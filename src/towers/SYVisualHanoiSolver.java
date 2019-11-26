@@ -6,7 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 //Figures out how to solve a game of hanoi. Can be paused, started, and have its speed changed.
 //Must be used in conjunction with visualizer, which actually draws the game
-public class VisualHanoiSolver
+public class SYVisualHanoiSolver
 {
     private Stack<Integer> stackA;//the first pole
     private Stack<Integer> stackB;//the second pole
@@ -16,12 +16,12 @@ public class VisualHanoiSolver
     private volatile AtomicBoolean selfDestruct;//is it time to reset?
     private boolean solvingActively; //are we solving right now? Has the simulation been started?
 
-    private Visualizer visuals = null;//visuals generates the actual "drawing" of a tower of hanoi game.
+    private SYVisualizer visuals = null;//visuals generates the actual "drawing" of a tower of hanoi game.
     private AtomicInteger frameWait; // how long to wait between frames, in milliseconds.
                                     //it's atomic so that it can be used concurrently
 
     //constructor
-    public VisualHanoiSolver(int discs, int frameWait)
+    public SYVisualHanoiSolver(int discs, int frameWait)
     {
         stackA = new Stack<Integer>();
         stackB = new Stack<Integer>();
@@ -136,7 +136,7 @@ public class VisualHanoiSolver
     }
 
     //sets if the stack is visual or not
-    public void setVisuals(Visualizer newVisuals)
+    public void setVisuals(SYVisualizer newVisuals)
     {
         visuals = newVisuals;
     }//end of setVisuality
@@ -167,7 +167,7 @@ public class VisualHanoiSolver
 
     //solves a tower of hanoi. You must tell it the number of discs to move,
     //the Peg that the discs are on, the peg that they are to be moved to, and the extra holding peg
-    public void solve(int toMove, Peg from, Peg to, Peg hold)
+    public void solve(int toMove, SYPeg from, SYPeg to, SYPeg hold)
     {
         if (selfDestruct.get())//if we are canceling,
         {
@@ -212,7 +212,7 @@ public class VisualHanoiSolver
     }//end of solve
 
     //moves a disc from one peg to another
-    public void move(Peg from, Peg to)
+    public void move(SYPeg from, SYPeg to)
     {
         Stack<Integer> fromStack = stackFromPeg(from);
         Stack<Integer> toStack = stackFromPeg(to);
@@ -220,17 +220,17 @@ public class VisualHanoiSolver
     }//end of move
 
     //given a Peg, returns a stack
-    public Stack<Integer> stackFromPeg(Peg peg)
+    public Stack<Integer> stackFromPeg(SYPeg peg)
     {
-        if (peg == Peg.A)
+        if (peg == SYPeg.A)
         {
             return stackA;
         }
-        if (peg == Peg.B)
+        if (peg == SYPeg.B)
         {
             return stackB;
         }
-        if (peg == Peg.C)
+        if (peg == SYPeg.C)
         {
             return stackC;
         }

@@ -5,7 +5,7 @@ import java.util.Scanner;
 //This is a utility class made by B-C-E (Sean Yanik)
 //(This sort of GetInput thing comes up a lot)
 //Gets input from the user, and forces them to retype their input if it is bad
-public class GetInput
+public class SYGetInput
 {
     //gets the user to input yes or no
     //returns one of the characters (y,n)
