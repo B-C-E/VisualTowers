@@ -246,9 +246,9 @@ public class Visualizer
 
             //first, we will calulate the size and position of the poles
 
-            //Width of the pole is 85% the size of the smallest disk that will be on it, or 1/10th the width of the base,
+            //Width of the pole is 85% the size of the smallest disk that will be on it, or 1/6th the width of the base,
             //whichever is smaller
-            int widthPole = Math.min(lengthBase/10,(int) ((8.5 / 10) * (lengthBase / 3.2) * (1.0 / solver.getDiscs())));
+            int widthPole = Math.min((int)(lengthBase/6.5),(int) ((8.5 / 10) * (lengthBase / 3.2) * (1.0 / solver.getDiscs())));
 
             //height of the pole is 0.55 * the height of the screen
             int heightPole = height * 55 / 100;
