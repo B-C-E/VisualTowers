@@ -30,7 +30,7 @@ public class BasicDriver
 
 
             System.out.println("[s] Generate a solution for a number of disks (in boring old text)");
-            System.out.println("[v] Enter Visual Mode");
+            System.out.println("[v] Enter Visual Mode...");
             System.out.println("[e] Exit");
 
             //GET INPUT
@@ -48,7 +48,7 @@ public class BasicDriver
                 case 'v':
                     System.out.println("Exiting text mode... \nLoading...");
                     visualize();
-                    break;
+                    return;
 
                 //OPTION E - EXIT
                 case 'e':
@@ -94,18 +94,13 @@ public class BasicDriver
     //Visualizes a game of hanoi
     public static void visualize()
     {
-            System.out.println("How many discs shall we simulate?");
-             int discs = GetInput.getRangeInt(1, Integer.MAX_VALUE);
-
-
-             System.out.println("Generating visuals... (Will open in a new window. If it does not open, your IDE" +
+                        System.out.println("Generating visuals... (Will open in a new window. If it does not open, your IDE" +
                      " may be blocking the opening of new windows)");
-             VisualHanoiSolver visHan = new VisualHanoiSolver(discs,1000);
+             VisualHanoiSolver visHan = new VisualHanoiSolver(4,-1);
 
              //Since we have said -1 for width and height, it will attempt to autodetermine a good size
              Visualizer myVisuals = new Visualizer(-1,-1,"Visual Hanoi Solver",visHan);
              visHan.setVisuals(myVisuals);
-             visHan.solve(discs,Peg.A,Peg.C,Peg.B);
 
     }//end of subLoop
 

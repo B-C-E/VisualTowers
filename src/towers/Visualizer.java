@@ -12,17 +12,18 @@ import javax.swing.event.ChangeListener;
 
 public class Visualizer
 {
-    public HanoiPanel panel;
-    public VisualHanoiSolver solver;
+    private HanoiPanel panel;
+    private VisualHanoiSolver solver;
     private int width;
     private int height;
     private int frameWait;
-    private String name;
-    public JFrame getFrame()
-    {
-        return frame;
-    }
     private JFrame frame;
+    private Visualizer theseVisuals = this;//used for self reference in a few specific areas
+
+    public HanoiPanel getPanel()
+    {
+        return panel;
+    }
 
     public Visualizer(int width, int height, String name, VisualHanoiSolver solver)
     {
@@ -37,11 +38,11 @@ public class Visualizer
 
         this.width = width;
         this.height = height;
-        this.frameWait = -1;
+        this.frameWait = 3+(int)(0.1*Math.pow(75,2));
         this.frame = new JFrame(name);
         frame.setPreferredSize(new Dimension(width, height));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //frame.setUndecorated(true);
+        frame.setAlwaysOnTop(true);
         frame.setResizable(true);
         frame.setVisible(true);
         frame.setLocation(20, 20);
@@ -51,6 +52,8 @@ public class Visualizer
         constructSouth();
 
         frame.pack();
+        frame.setAlwaysOnTop(false);
+
         this.solver = solver;
     }
 
@@ -78,13 +81,35 @@ public class Visualizer
     private void constructSouth() {
         JPanel p = new JPanel();
 
+        //slider for discs
+        p.add(new JLabel("Discs:"));
+
+        final JSlider sliderDiscs = new JSlider(JSlider.HORIZONTAL,1,64,4);
+        sliderDiscs.addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent e) {
+                solver.changeSolver(sliderDiscs.getValue());
+                panel.repaint();
+            }
+        });
+        sliderDiscs.setMajorTickSpacing(8);
+        sliderDiscs.setMinorTickSpacing(4);
+        sliderDiscs.setPaintTicks(true);
+        sliderDiscs.setPaintLabels(true);
+
+        p.add(sliderDiscs);
 
         //A nice slider for framerate
-        final JSlider slider = new JSlider(JSlider.HORIZONTAL,1,100,50);
+        final JSlider slider = new JSlider(JSlider.HORIZONTAL,1,100,75);
         slider.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent e) {
-                int newWait = slider.getValue()*20;
-                solver.setFrameWait(newWait);
+                int newWait = 3+(int)(0.1*Math.pow(slider.getValue(),2));//adjusts on a weird exponential scale
+
+                if(solver.isSolvingActively())//if it is already solving
+                {
+                    solver.setFrameWait(newWait);//update the speed
+                }
+
+                //if it has not yet started solving, simply set it so that when it starts it will use the new speed
                 frameWait = newWait;//stores last framerate so that we can go back to that rate after pausing
             }
         });
@@ -103,6 +128,24 @@ public class Visualizer
         JButton b1 = new JButton("Start");
         b1.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+                //if the solver has not yet started solving
+                if (!solver.isSolvingActively())
+                {
+                    solver.setSolvingActively(true);
+                    solver.setSelfDestruct(false);
+                    Thread solveThread = new Thread()
+                    {
+                        public void run()
+                        {
+                            try
+                            {
+                                solver.solve(solver.getDiscs(), Peg.A, Peg.C, Peg.B);
+                            }catch (Exception e)
+                            {}
+                        }
+                    };
+                    solveThread.start();
+                }
             solver.setFrameWait(frameWait);
             }
         });
@@ -116,7 +159,39 @@ public class Visualizer
         });
         p.add(b2);
 
+        //this buttons toggles (on or off) infinite solving speed (as fast as the computer can handle
+        JButton b3 = new JButton("Infinite Speed");
+        b3.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
 
+                //clicking on the infinite speed button, will auto-start the simulation, if it isn't running
+                if (!solver.isSolvingActively())
+                {
+                    //(Clicks the start button)
+                    b1.doClick();
+                }
+                if (solver.getFrameWait().get() == 0)
+                {
+                    solver.setFrameWait(frameWait);
+                }
+                else
+                {
+                    solver.setFrameWait(0);
+                }
+
+
+            }
+        });
+        p.add(b3);
+
+        JButton b4 = new JButton("Reset");
+        b4.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                solver.changeSolver(sliderDiscs.getValue());
+                panel.repaint();
+            }
+        });
+        p.add(b4);
 
         frame.getContentPane().add(p, BorderLayout.SOUTH);
     }//end of constructSouth
