@@ -4,11 +4,11 @@ package towers;
 public class BasicDriver
 {
 
+    //run this one
     public static void main(String args[])
     {
         //VARIABLES
-        boolean b_readyToExit = false;
-
+        boolean b_readyToExit = false;//time to exit?
 
         //INTRO
         System.out.println("Hello and welcome to the Towers of Hanoi. I present you two options:");
@@ -40,16 +40,12 @@ public class BasicDriver
                 case 'v':
                     System.out.println("Exiting text mode... \nLoading...");
                     visualize();
-                    return;
+                    return;//entering visual mode will quit text mode
 
                 //OPTION E - EXIT
                 case 'e':
                     b_readyToExit = true;
                     break;
-
-                //ERROR
-                default:
-                    throw new IndexOutOfBoundsException("User selected a valid Option with no Implementation");
             }//END OF SWITCH
 
         }//END OF DRIVER LOOP
@@ -64,7 +60,7 @@ public class BasicDriver
     public static void solveForNumber()
     {
         System.out.println("What number of disks would you like to solve for?");
-        int discs = GetInput.getRangeInt(1, Integer.MAX_VALUE);
+        int discs = GetInput.getRangeInt(1, Integer.MAX_VALUE);//Integer.max_value is very large. Don't try that one
         HanoiSolver solver = new HanoiSolver(discs);
         System.out.println("The correct solution is:");
         solver.solve(discs, Peg.A, Peg.C, Peg.B);
@@ -90,10 +86,14 @@ public class BasicDriver
                 " may be blocking the opening of new windows)");
 
 
+        //make a visual solver, which does the thinking about where to move discs
         VisualHanoiSolver visHan = new VisualHanoiSolver(4, -1);
 
-        //Since we have said -1 for width and height, it will attempt to autodetermine a good size
+        //makes a visualizer, which creates the frame, draws to it, and edits the solver
+        //Since we have said -1 for width and height, it will attempt to auto-determine a good size
         Visualizer myVisuals = new Visualizer(-1, -1, "Visual Hanoi Solver", visHan);
+
+        //the solver needs access to the visualizer for things to work
         visHan.setVisuals(myVisuals);
 
     }//end of subLoop

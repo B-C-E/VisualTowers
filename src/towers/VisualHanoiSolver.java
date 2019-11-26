@@ -4,16 +4,21 @@ import java.util.Stack;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
+//Figures out how to solve a game of hanoi. Can be paused, started, and have its speed changed.
+//Must be used in conjunction with visualizer, which actually draws the game
 public class VisualHanoiSolver
 {
-    private Stack<Integer> stackA;
-    private Stack<Integer> stackB;
-    private Stack<Integer> stackC;
+    private Stack<Integer> stackA;//the first pole
+    private Stack<Integer> stackB;//the second pole
+    private Stack<Integer> stackC;//the third pole
+    private Integer discs;//not an int; an integer. How many discs do we have?
+
     private volatile AtomicBoolean selfDestruct;//is it time to reset?
-    private boolean solvingActively; //are we solving right now?
-    private Integer discs;//not an int; an integer
-    private Visualizer visuals = null;
-    private AtomicInteger frameWait; // how long to wait between frames
+    private boolean solvingActively; //are we solving right now? Has the simulation been started?
+
+    private Visualizer visuals = null;//visuals generates the actual "drawing" of a tower of hanoi game.
+    private AtomicInteger frameWait; // how long to wait between frames, in milliseconds.
+                                    //it's atomic so that it can be used concurrently
 
     //constructor
     public VisualHanoiSolver(int discs, int frameWait)
@@ -23,26 +28,32 @@ public class VisualHanoiSolver
         stackC = new Stack<Integer>();
 
         this.discs = discs;
-        this.selfDestruct = new AtomicBoolean(false);
-        this.solvingActively = false;
+        this.selfDestruct = new AtomicBoolean(false);//it's not yet time to reset
+        this.solvingActively = false;//we haven't started solving yet
 
         this.frameWait = new AtomicInteger(frameWait);
 
+
+        //put our discs on the first stack
         for (int i = discs; i > 0; i--)
         {
             stackA.push(i);
         }
     }//end of constructor
 
+    //used to reset a VisualHanoiSolver
+    //newDiscs - how many discs shall we have this time?
     public void changeSolver(int newDiscs)
     {
-        setSelfDestruct(true);
-        setDiscs(newDiscs);
+        setSelfDestruct(true);//start reseting
+        setDiscs(newDiscs);//change disc numbers
 
         setStackB(new Stack<Integer>());
         setStackC(new Stack<Integer>());
 
-        setFrameWait(-1);
+        setFrameWait(-1);//pause it
+
+        //reset the first stack
         Stack temp = new Stack<Integer>();
         for (int i = newDiscs; i > 0; i--)
         {
@@ -50,22 +61,28 @@ public class VisualHanoiSolver
         }
 
         setStackA(temp);
+
+        //we aren't solving anymore
         setSolvingActively(false);
     }
 
+
+    //ACCESSORS + MUTATORs
+    //   |
+    //   V
+
+    //are we solving right now?
     public boolean isSolvingActively()
     {
         return solvingActively;
     }
 
+    //change if we are solving or not
     public void setSolvingActively(boolean solvingActively)
     {
         this.solvingActively = solvingActively;
     }
 
-    //ACCESSORS
-    //   |
-    //   V
     public Stack<Integer> getStackA()
     {
         return stackA;
@@ -96,10 +113,6 @@ public class VisualHanoiSolver
     {
         return stackC;
     }
-
-    //
-    //
-    //End of Accessors
 
     public void setStackC(Stack<Integer> stackC)
     {
@@ -141,14 +154,6 @@ public class VisualHanoiSolver
         }
     }
 
-    public void setFrameWait(AtomicInteger frameWait)
-    {
-        synchronized (frameWait)
-        {
-            this.frameWait = frameWait;
-        }
-    }
-
     public void setSelfDestruct(boolean selfDestruct)
     {
         synchronized (this.selfDestruct)
@@ -156,14 +161,17 @@ public class VisualHanoiSolver
             this.selfDestruct = new AtomicBoolean(selfDestruct);
         }
     }
+    //
+    //
+    //End of Accessors + mutators
 
     //solves a tower of hanoi. You must tell it the number of discs to move,
     //the Peg that the discs are on, the peg that they are to be moved to, and the extra holding peg
     public void solve(int toMove, Peg from, Peg to, Peg hold)
     {
-        if (selfDestruct.get())//if we are canceling this solve
+        if (selfDestruct.get())//if we are canceling,
         {
-            return;
+            return;//move up the recursive stack
         }
 
 
@@ -190,7 +198,8 @@ public class VisualHanoiSolver
             //end of waiting between frames
 
             move(from, to);
-            visuals.getPanel().repaint();
+            visuals.getPanel().repaint();//update the screen
+
         } else//if there are multiple disks
         {
             //move everything but the last to the holding peg

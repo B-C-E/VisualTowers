@@ -1,6 +1,7 @@
 package towers;
 
 //Can be used to solve a game of Hanoi with 3 towers and any number of pegs.
+//This class will only display HOW to solve a game, but won't actually do much
 //(The game is as follows: there are three pegs, with a number of discs on the first one.
 // Each disk is smaller than the disc beneath it, IE:
 //  0
@@ -16,12 +17,6 @@ public class HanoiSolver
     {
         this.discs = discs;
     }//end of constructor
-
-    //Accessor
-    public int getDiscs()
-    {
-        return discs;
-    }//end of getDiscs
 
     //solves a tower of hanoi. You must tell it the number of discs to move,
     //the Peg that the discs are on, the peg that they are to be moved to, and the extra holding peg
