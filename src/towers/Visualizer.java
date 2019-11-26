@@ -16,11 +16,13 @@ public class Visualizer
     private int height;
     private int frameWait;
     private JFrame frame;
-    private Visualizer theseVisuals = this;//used for self reference in a few specific areas
 
+    //constructor
+    //Needs a width, height, and name (What shall be displayed in the top of the window)
+    //and which VisualHanoiSolver will be solving a game of hanoi for it
     public Visualizer(int width, int height, String name, VisualHanoiSolver solver)
     {
-        //if width is given as -1, autogenerate a nice size for the width
+        //if width is given as -1, it will auto-generate a nice size for the width
         if (width == -1)
         {
             //get screen size using the Toolkit class
@@ -31,79 +33,69 @@ public class Visualizer
 
         this.width = width;
         this.height = height;
-        this.frameWait = 3 + (int) (0.1 * Math.pow(75, 2));
-        this.frame = new JFrame(name);
+
+        this.frameWait = 3 + (int) (0.1 * Math.pow(75, 2));//default solving speed. Just a number
+
+        this.frame = new JFrame(name);//the window containing the game
         frame.setPreferredSize(new Dimension(width, height));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setAlwaysOnTop(true);
-        frame.setResizable(true);
+        frame.setAlwaysOnTop(true);//move it on top (later in the code, this is disabled)
+        frame.setResizable(true);//Sure, why not resize it
         frame.setVisible(true);
-        frame.setLocation(20, 20);
+        frame.setLocation(20, 20);//move it over just a little bit, from the top left
 
-        panel = new HanoiPanel();
-        frame.getContentPane().add(panel);
-        constructSouth();
+        panel = new HanoiPanel();//this is where the game is actually drawn
+        frame.getContentPane().add(panel);//add the panel to the frame
+        constructSouth();//add the (southern) buttons to the frame
 
-        frame.pack();
-        frame.setAlwaysOnTop(false);
+        frame.pack();//pack up the frame
+        frame.setAlwaysOnTop(false);//make it so that the frame is not locked on top anymore
 
-        this.solver = solver;
-    }
+        this.solver = solver;//(the SisualHanoiSolver)
+    }//end of constructor
+
+    //Accessors!
+    //    +
+    // Mutators!
 
     public HanoiPanel getPanel()
     {
         return panel;
     }
 
-    public int getWidth()
-    {
-        return width;
-    }
 
-    public void setWidth(int width)
-    {
-        this.width = width;
-    }
-
-    public int getHeight()
-    {
-        return height;
-    }
-
-    public void setHeight(int height)
-    {
-        this.height = height;
-    }
 
     //Creates the buttons on the bottom panel
     private void constructSouth()
     {
+        //create a new panel to hold buttons
         JPanel p = new JPanel();
 
         //slider for discs
-        p.add(new JLabel("Discs:"));
+        p.add(new JLabel("Discs:"));//label
 
+        //make the disc slider
         final JSlider sliderDiscs = new JSlider(JSlider.HORIZONTAL, 1, 64, 4);
         sliderDiscs.addChangeListener(new ChangeListener()
         {
-            public void stateChanged(ChangeEvent e)
+            public void stateChanged(ChangeEvent e)//when clicked...
             {
-                solver.changeSolver(sliderDiscs.getValue());
-                panel.repaint();
+                solver.changeSolver(sliderDiscs.getValue());//change number of discs
+                panel.repaint();                           // repaint
             }
         });
-        sliderDiscs.setMajorTickSpacing(8);
-        sliderDiscs.setMinorTickSpacing(4);
+        sliderDiscs.setMajorTickSpacing(21);//visual look of the slider
+        sliderDiscs.setMinorTickSpacing(7);
         sliderDiscs.setPaintTicks(true);
         sliderDiscs.setPaintLabels(true);
 
-        p.add(sliderDiscs);
+        p.add(sliderDiscs);//add the slider
 
         //A nice slider for framerate
         final JSlider slider = new JSlider(JSlider.HORIZONTAL, 1, 100, 75);
         slider.addChangeListener(new ChangeListener()
         {
-            public void stateChanged(ChangeEvent e)
+            public void stateChanged(ChangeEvent e)//when clicked
             {
                 int newWait = 3 + (int) (0.1 * Math.pow(slider.getValue(), 2));//adjusts on a weird exponential scale
 
@@ -120,7 +112,7 @@ public class Visualizer
         slider.setMinorTickSpacing(5);
         slider.setPaintTicks(true);
 
-
+        //add labels, fast, and slow, and the slider between them
         p.add(new JLabel("Fast"));
         p.add(slider);
         p.add(new JLabel("Slow"));
@@ -131,13 +123,13 @@ public class Visualizer
         JButton b1 = new JButton("Start");
         b1.addActionListener(new ActionListener()
         {
-            public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent e)//when clicked
             {
-                //if the solver has not yet started solving
+                //if the solver has not yet started solving, turn it on
                 if (!solver.isSolvingActively())
                 {
                     solver.setSolvingActively(true);
-                    solver.setSelfDestruct(false);
+                    solver.setSelfDestruct(false);//if self destruct happened to be on
                     Thread solveThread = new Thread()
                     {
                         public void run()
@@ -152,17 +144,21 @@ public class Visualizer
                     };
                     solveThread.start();
                 }
+                //set the frameWait to the right number
                 solver.setFrameWait(frameWait);
             }
         });
+        //add the button
         p.add(b1);
+        //end of start button
 
+        //Stop button
         JButton b2 = new JButton("Stop");
         b2.addActionListener(new ActionListener()
         {
-            public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent e)//when clicked
             {
-                solver.setFrameWait(-1);
+                solver.setFrameWait(-1);//pause it
             }
         });
         p.add(b2);
@@ -171,7 +167,7 @@ public class Visualizer
         JButton b3 = new JButton("Infinite Speed");
         b3.addActionListener(new ActionListener()
         {
-            public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent e)//when clicked
             {
 
                 //clicking on the infinite speed button, will auto-start the simulation, if it isn't running
@@ -180,12 +176,12 @@ public class Visualizer
                     //(Clicks the start button)
                     b1.doClick();
                 }
-                if (solver.getFrameWait().get() == 0)
+                if (solver.getFrameWait().get() == 0)//if currently at infinite speed
                 {
-                    solver.setFrameWait(frameWait);
-                } else
+                    solver.setFrameWait(frameWait);//turn off infinite speed
+                } else//if not yet at infinite speed
                 {
-                    solver.setFrameWait(0);
+                    solver.setFrameWait(0);//turn on infinite speed
                 }
 
 
@@ -193,10 +189,11 @@ public class Visualizer
         });
         p.add(b3);
 
+        //reset button
         JButton b4 = new JButton("Reset");
         b4.addActionListener(new ActionListener()
         {
-            public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent e)//when clicked
             {
                 solver.changeSolver(sliderDiscs.getValue());
                 panel.repaint();
@@ -204,10 +201,11 @@ public class Visualizer
         });
         p.add(b4);
 
+        //add all the buttons to the bottom!
         frame.getContentPane().add(p, BorderLayout.SOUTH);
     }//end of constructSouth
 
-    //internal class
+    //internal class for drawing the game
     public class HanoiPanel extends JPanel
     {
 
@@ -247,8 +245,9 @@ public class Visualizer
 
             //first, we will calulate the size and position of the poles
 
-            //Width of the pole is 85% the size of the smallest disk that will be on it.
-            int widthPole = (int) ((8.5 / 10) * (lengthBase / 3.2) * (1.0 / solver.getDiscs()));
+            //Width of the pole is 85% the size of the smallest disk that will be on it, or 1/10th the width of the base,
+            //whichever is smaller
+            int widthPole = Math.min(lengthBase/10,(int) ((8.5 / 10) * (lengthBase / 3.2) * (1.0 / solver.getDiscs())));
 
             //height of the pole is 0.55 * the height of the screen
             int heightPole = height * 55 / 100;
@@ -325,7 +324,7 @@ public class Visualizer
                 heightSpot += discHeight;
             }
 
-            //populatepole 3
+            //populate pole 3
 
             //reset how high up we are drawing discs
             heightSpot = discHeight;

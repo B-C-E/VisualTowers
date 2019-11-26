@@ -238,5 +238,4 @@ public class VisualHanoiSolver
         throw new IllegalArgumentException("Impossible Peg selected");
     }//end of stackFromPeg
 
-
 }//end of VisualHanoiSolver
